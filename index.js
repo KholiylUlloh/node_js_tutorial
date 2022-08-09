@@ -1,23 +1,12 @@
 const express = require('express')
-const path = require('path')
-const books = require('./books')
 
 const app = express()
 
-//Get all books
-app.get('/api/books', (req, res)=>{
-    res.json(books)
-})
+app.use('/api/books', require('./routes/routes'))
 
-//Get a book by id
-app.get('/api/books/:id', (req, res)=>{
-   const isExist = books.some(book => book.id == req.params.id)
-   if(isExist) {
-    res.json(books.filter(book => book.id == req.params.id))
-   }else {
-    res.status(404).json({message:`The book ${req.params.id} is not available`})
-   }
-})
+//Body parser
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
 
 const PORT = process.env.PORT || 3000
 
